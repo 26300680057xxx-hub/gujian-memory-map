@@ -1,0 +1,282 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 36 18% 6%;
+    --foreground: 42 30% 90%;
+    --card: 36 16% 9%;
+    --card-foreground: 42 30% 90%;
+    --popover: 36 16% 8%;
+    --popover-foreground: 42 30% 90%;
+    --primary: 8 62% 48%;
+    --primary-foreground: 42 40% 94%;
+    --secondary: 36 14% 14%;
+    --secondary-foreground: 42 30% 88%;
+    --muted: 36 12% 16%;
+    --muted-foreground: 40 12% 62%;
+    --accent: 40 45% 55%;
+    --accent-foreground: 36 20% 10%;
+    --destructive: 0 62% 42%;
+    --destructive-foreground: 42 40% 94%;
+    --border: 38 12% 20%;
+    --input: 38 12% 20%;
+    --ring: 40 45% 55%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, hsl(40 30% 12% / 0.6), transparent),
+      radial-gradient(ellipse 60% 40% at 90% 110%, hsl(8 50% 12% / 0.35), transparent);
+    background-attachment: fixed;
+  }
+}
+
+@layer utilities {
+  .font-kai {
+    font-family: 'Kaiti SC', 'STKaiti', 'KaiTi', 'Noto Serif SC', serif;
+  }
+  .text-vertical {
+    writing-mode: vertical-rl;
+    letter-spacing: 0.35em;
+  }
+  .ink-noise {
+    position: relative;
+  }
+  .ink-noise::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .paper-edge {
+    box-shadow:
+      0 0 0 1px hsl(40 30% 25% / 0.4),
+      0 20px 60px -20px hsl(0 0% 0% / 0.8),
+      inset 0 1px 0 hsl(42 40% 90% / 0.06);
+  }
+}
+
+@keyframes ping {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.6; }
+  80%, 100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+}
+
+@keyframes floor-drop {
+  0% { opacity: 0; transform: translateY(-80px) scale(1.05); filter: brightness(2.2) blur(3px); }
+  55% { opacity: 1; transform: translateY(5px) scale(1); filter: brightness(1.5) blur(0); }
+  75% { transform: translateY(-3px); filter: brightness(1.2); }
+  100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes mist-drift {
+  from { transform: translateX(-56%) scaleX(1); }
+  to { transform: translateX(-44%) scaleX(1.15); }
+}
+
+@keyframes ring-burst {
+  0% { opacity: 0.9; transform: translateX(-50%) scale(0.4); border-color: #e8cf9a; }
+  100% { opacity: 0; transform: translateX(-50%) scale(3.2); border-color: rgba(201,160,90,0); }
+}
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes building-pop {
+  0% { transform: translateZ(0px); filter: drop-shadow(0 0 0 rgba(0,0,0,0)) brightness(1); }
+  60% { transform: translateZ(48px); }
+  100% {
+    transform: translateZ(42px);
+    filter: drop-shadow(0 26px 22px rgba(0,0,0,0.7)) brightness(1.12) saturate(1.08);
+  }
+}
+
+@keyframes city-rise {
+  from { transform: translateZ(0px); filter: drop-shadow(0 0 0 rgba(0,0,0,0)) brightness(1); }
+  to { transform: translateZ(28px); filter: drop-shadow(0 24px 28px rgba(0,0,0,0.65)) brightness(1.08); }
+}
+
+@keyframes city-label {
+  from { opacity: 0; transform: translate(-50%,-30%) translateZ(60px) scale(0.7); }
+  to { opacity: 1; transform: translate(-50%,-50%) translateZ(60px) scale(1); }
+}
+
+@keyframes building-rise {
+  0% { opacity: 0; transform: translateY(60px) scale(0.92); filter: blur(14px); }
+  60% { opacity: 1; filter: blur(2px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes reveal-glow {
+  0% { opacity: 0; transform: scale(0.6); }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.35; transform: scale(1.15); }
+}
+
+@keyframes particle-float {
+  0% { opacity: 0; transform: translateY(24px) scale(0.5); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-70px) scale(1.1); }
+}
+
+@keyframes reveal-fade-out {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* ---- 小巧思：穿越牌坊 / 烽火挺立 / 梁林测绘 ---- */
+@keyframes fly-through {
+  0% { opacity: 0; transform: scale(0.45); }
+  18% { opacity: 1; }
+  55% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(7.5); }
+}
+
+@keyframes flame-flicker {
+  0%, 100% { opacity: 0.5; transform: scaleY(1) scaleX(1); }
+  25% { opacity: 0.8; transform: scaleY(1.12) scaleX(0.97); }
+  50% { opacity: 0.6; transform: scaleY(0.94) scaleX(1.03); }
+  75% { opacity: 0.9; transform: scaleY(1.06) scaleX(1); }
+}
+
+@keyframes ember-rise {
+  0% { opacity: 0; transform: translateY(0) scale(1); }
+  15% { opacity: 0.95; }
+  100% { opacity: 0; transform: translateY(-110px) scale(0.5); }
+}
+
+@keyframes fade-in-late {
+  0%, 55% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes survey-line {
+  0%, 55% { opacity: 0; transform: rotate(-8deg) scaleX(0); }
+  70% { opacity: 0.9; }
+  100% { opacity: 0.9; transform: rotate(-8deg) scaleX(1); }
+}
+
+/* ---- 悬空寺 · 支撑木柱自崖下生长 ---- */
+@keyframes stilt-grow {
+  0% { opacity: 0; transform: scaleY(0); }
+  30% { opacity: 1; }
+  100% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ---- 雁门关 / 娘子关 · 战旗猎猎 ---- */
+@keyframes flag-wave {
+  0%, 100% { transform: skewY(0deg) scaleX(1); }
+  50% { transform: skewY(-7deg) scaleX(0.92); }
+}
+
+/* ---- 晋祠 · 难老泉涟漪扩散 ---- */
+@keyframes ripple-spread {
+  0% { opacity: 0.85; transform: translateX(-50%) scale(0.3); }
+  100% { opacity: 0; transform: translateX(-50%) scale(1.7); }
+}
+
+/* ---- 壶口 · 黄河奔流：水体无缝向下滚动 ---- */
+@keyframes water-scroll {
+  from { transform: translateY(0); }
+  to { transform: translateY(50%); }
+}
+
+@keyframes mist-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.9; }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes seal-stamp {
+  0% { opacity: 0; transform: scale(1.6) rotate(-14deg); }
+  60% { opacity: 1; transform: scale(0.95) rotate(-6deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-6deg); }
+}
+
+/* ---- 出场特效差异化 ---- */
+@keyframes reveal-glow-in {
+  0% { opacity: 0; transform: scale(0.94); filter: drop-shadow(0 0 0 rgba(232,207,154,0)); }
+  55% { opacity: 1; filter: drop-shadow(0 0 38px rgba(232,207,154,0.95)); }
+  100% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 16px rgba(201,160,90,0.55)); }
+}
+
+@keyframes reveal-mist-in {
+  0% { opacity: 0; filter: blur(18px); transform: translateY(14px); }
+  100% { opacity: 1; filter: blur(0); transform: none; }
+}
+
+@keyframes reveal-spin-in {
+  0% { opacity: 0; transform: rotate(-10deg) scale(0.6); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes reveal-lantern {
+  0% { opacity: 0.2; filter: brightness(0.3) saturate(0.5); }
+  55% { opacity: 1; filter: brightness(1.3) saturate(1.15); }
+  100% { opacity: 1; filter: brightness(1); }
+}
+
+@keyframes reveal-unroll {
+  0% { opacity: 0; clip-path: inset(0 46% 0 46%); }
+  25% { opacity: 1; }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+@keyframes reveal-unroll-bar {
+  0% { opacity: 0; transform: scaleX(0); }
+  30% { opacity: 1; }
+  100% { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes lantern-on {
+  0% { opacity: 0; transform: scale(0.4); }
+  45% { opacity: 1; transform: scale(1.25); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-float-slow { animation: float-slow 7s ease-in-out infinite; }
+.animate-fade-up { animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-seal { animation: seal-stamp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both; }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: hsl(36 18% 6%); }
+::-webkit-scrollbar-thumb { background: hsl(38 14% 22%); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(40 20% 30%); }
+
+::selection {
+  background: hsl(8 62% 48% / 0.85);
+  color: hsl(42 40% 94%);
+}
