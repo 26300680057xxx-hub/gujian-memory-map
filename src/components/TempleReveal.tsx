@@ -295,10 +295,26 @@ export default function TempleReveal({ onDone }: Props) {
       const velocities = new Float32Array(count * 3), colors = new Float32Array(count * 3), random = new Float32Array(count)
       const area = surfaces.reduce((total, surface) => total + surface.area, 0)
       const sample = new THREE.Vector3(), color = new THREE.Color()
+      const maskCanvas = document.createElement('canvas')
+      maskCanvas.width = mask.image.width; maskCanvas.height = mask.image.height
+      const maskContext = maskCanvas.getContext('2d')!
+      maskContext.drawImage(mask.image, 0, 0)
+      const maskPixels = maskContext.getImageData(0, 0, maskCanvas.width, maskCanvas.height).data
       for (let index = 0; index < count; index++) {
         let selection = Math.random() * area
         const surface = surfaces.find((item) => { selection -= item.area; return selection <= 0 }) ?? surfaces[0]
         surface.sampler.sample(sample)
+        // Carry the repaired backing into the particle model as well, keeping
+        // the same complete silhouette in the reconstructed and burst phases.
+        if (index % 9 === 0) {
+          let x = 0, y = 0
+          for (let attempt = 0; attempt < 100; attempt++) {
+            x = Math.floor(Math.random() * maskCanvas.width)
+            y = Math.floor(Math.random() * maskCanvas.height)
+            if (maskPixels[(y * maskCanvas.width + x) * 4] > 127) break
+          }
+          sample.set((x / maskCanvas.width - 0.5) * 1.90632216, (0.5 - y / maskCanvas.height) * 2.65, -1.017)
+        }
         sample.toArray(positions, index * 3)
         const seed = Math.random(), angle = Math.random() * Math.PI * 2
         const radius = 2.2 + Math.random() * 1.75
