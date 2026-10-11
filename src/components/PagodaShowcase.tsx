@@ -1,3 +1,4 @@
+import { useTranslation } from '@/lib/language'
 import { useEffect } from 'react'
 import r1 from '@/assets/pagoda-r1.png'
 import r2 from '@/assets/pagoda-r2.png'
@@ -26,6 +27,8 @@ const BOX_H = 1206
 const STACK_MS = 340
 
 export default function PagodaShowcase({ onDone }: Props) {
+  const { t } = useTranslation()
+
   useEffect(() => {
     const fn = (e: KeyboardEvent) => e.key === 'Escape' && onDone()
     window.addEventListener('keydown', fn)
@@ -43,7 +46,7 @@ export default function PagodaShowcase({ onDone }: Props) {
       }}
       onClick={onDone}
       role="dialog"
-      aria-label="应县木塔 · 营造"
+      aria-label={t("应县木塔 · 营造")}
     >
       {/* 纸纹噪点（ink-noise 自带 position:relative，会覆盖 fixed，故放内层） */}
       <div className="ink-noise pointer-events-none absolute inset-0" />
@@ -68,14 +71,12 @@ export default function PagodaShowcase({ onDone }: Props) {
       <div
         className="text-vertical pointer-events-none absolute left-[6%] top-1/2 hidden -translate-y-1/2 font-kai text-lg tracking-[0.6em] text-[#8a744a]/70 md:block"
         style={{ animation: 'building-rise 1.2s ease 0.3s both' }}
-      >
-        佛宫寺释迦塔
+      >{t("佛宫寺释迦塔")}
       </div>
       <div
         className="text-vertical pointer-events-none absolute right-[6%] top-1/2 hidden -translate-y-1/2 font-kai text-lg tracking-[0.6em] text-[#8a744a]/70 md:block"
         style={{ animation: 'building-rise 1.2s ease 0.5s both' }}
-      >
-        辽清宁二年 · 敕建
+      >{t("辽清宁二年 · 敕建")}
       </div>
 
       {/* 金粉粒子 */}
@@ -158,8 +159,7 @@ export default function PagodaShowcase({ onDone }: Props) {
         <p
           className="mb-2 text-[11px] tracking-[0.7em] text-[#a08c5f]"
           style={{ animation: `building-rise 0.9s cubic-bezier(0.22,1,0.36,1) ${stackEnd}ms both` }}
-        >
-          辽 · 清宁二年 1056 · 山西朔州应县
+        >{t("辽 · 清宁二年 1056 · 山西朔州应县")}
         </p>
 
         <div
@@ -171,8 +171,7 @@ export default function PagodaShowcase({ onDone }: Props) {
           <h2
             className="font-kai text-5xl font-black tracking-wide text-[#f3e3c0] sm:text-6xl"
             style={{ textShadow: '0 0 46px rgba(201,160,90,0.55), 0 4px 22px rgba(0,0,0,0.85)' }}
-          >
-            应县木塔
+          >{t("应县木塔")}
           </h2>
           <span className="hidden rotate-45 text-[10px] text-[#c9a05a] sm:block">◆</span>
           <span className="hidden h-px w-14 bg-gradient-to-l from-transparent to-[#c9a05a] sm:block" />
@@ -181,8 +180,7 @@ export default function PagodaShowcase({ onDone }: Props) {
         <p
           className="mt-2 text-sm tracking-[0.35em] text-[#8f8672]"
           style={{ animation: `building-rise 0.9s ease ${stackEnd + 300}ms both` }}
-        >
-          佛宫寺释迦塔 · 世界上最高最古老的木塔
+        >{t("佛宫寺释迦塔 · 世界上最高最古老的木塔")}
         </p>
 
         {/* 数据环 */}
@@ -191,14 +189,14 @@ export default function PagodaShowcase({ onDone }: Props) {
           style={{ animation: `building-rise 0.9s ease ${stackEnd + 450}ms both` }}
         >
           {[
-            ['67.31 m', '塔高'],
-            ['54 种', '斗拱'],
-            ['0 根', '铁钉'],
-            ['969 年', '已站立'],
+            ['67.31 m', t("塔高")],
+            [t("54 种"), t("斗拱")],
+            [t("0 根"), t("铁钉")],
+            [t("969 年"), t("已站立")],
           ].map(([v, l]) => (
             <div key={l} className="text-center">
-              <div className="text-2xl font-bold text-[#c9a05a]" style={{ textShadow: '0 0 18px rgba(201,160,90,0.4)' }}>{v}</div>
-              <div className="mt-0.5 text-[10px] tracking-[0.35em] text-[#8f8672]">{l}</div>
+              <div className="text-2xl font-bold text-[#c9a05a]" style={{ textShadow: '0 0 18px rgba(201,160,90,0.4)' }}>{t(v)}</div>
+              <div className="mt-0.5 text-[10px] tracking-[0.35em] text-[#8f8672]">{t(l)}</div>
             </div>
           ))}
         </div>
@@ -209,10 +207,10 @@ export default function PagodaShowcase({ onDone }: Props) {
           style={{ animation: `seal-stamp 0.7s cubic-bezier(0.34,1.56,0.64,1) ${stackEnd + 650}ms both` }}
         >
           <div className="flex h-14 w-14 items-center justify-center rounded-[6px] border-2 border-[#d84a38] bg-[#a53428] shadow-[0_0_30px_rgba(192,58,42,0.5)]">
-            <span className="font-kai text-vertical text-lg font-bold leading-none text-[#f3e3c0]">应县</span>
+            <span className="font-kai text-vertical text-lg font-bold leading-none text-[#f3e3c0]">{t("应县")}</span>
           </div>
           <div className="flex h-14 w-14 items-center justify-center rounded-[6px] border-2 border-[#c9a05a] bg-transparent">
-            <span className="font-kai text-vertical text-lg font-bold leading-none text-[#c9a05a]">木塔</span>
+            <span className="font-kai text-vertical text-lg font-bold leading-none text-[#c9a05a]">{t("木塔")}</span>
           </div>
         </div>
       </div>
@@ -220,8 +218,7 @@ export default function PagodaShowcase({ onDone }: Props) {
       <p
         className="absolute bottom-6 text-[10px] tracking-[0.55em] text-[#5a5342]"
         style={{ animation: `building-rise 0.8s ease ${stackEnd + 950}ms both` }}
-      >
-        点 击 任 意 处 · 翻 开 木 塔 的 记 忆
+      >{t("点 击 任 意 处 · 翻 开 木 塔 的 记 忆")}
       </p>
     </div>
   )

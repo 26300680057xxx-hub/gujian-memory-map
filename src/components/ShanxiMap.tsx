@@ -1,3 +1,4 @@
+import { useTranslation } from '@/lib/language'
 import { sites, type Site } from '@/data/sites'
 
 interface Props {
@@ -88,9 +89,19 @@ const RED = '#d43d2a'
 const CREAM = '#f3e3c0'
 const INK_BG = '#14100a'
 
+const ENGLISH_LABELS: Record<string, string> = {
+  yingxian: 'Yingxian Pagoda', foguang: 'Foguang Temple', yungang: 'Yungang Grottoes',
+  xuankong: 'Hanging Temple', hengshan: 'Mount Heng', jinci: 'Jinci Temple',
+  shuanglin: 'Shuanglin Temple', xiaoxitian: 'Xiaoxitian', yonglegong: 'Yongle Palace',
+  wutaishan: 'Mount Wutai', yanmenguan: 'Yanmen Pass', niangziguan: 'Niangzi Pass',
+  qiaojia: 'Qiao Compound', huangcheng: 'Huangcheng House', guandimiao: 'Guandi Temple', hukou: 'Hukou Falls',
+}
+
 export default function ShanxiMap({ selected, onSelect }: Props) {
+  const { t, english } = useTranslation()
+
   return (
-    <svg viewBox="0 0 440 640" className="h-full w-full" role="img" aria-label="山西古建记忆地图">
+    <svg viewBox="0 0 440 640" className="h-full w-full" role="img" aria-label={t("山西古建记忆地图")}>
       <defs>
         <radialGradient id="land" cx="46%" cy="45%" r="72%">
           <stop offset="0%" stopColor="#2e2618" />
@@ -128,8 +139,7 @@ export default function ShanxiMap({ selected, onSelect }: Props) {
 
       {/* 黄河（先画，省界之下） */}
       <path d={huanghePath} fill="none" stroke="url(#river)" strokeWidth="6" strokeLinecap="round" />
-      <text x={X(110.28)} y={Y(36.5)} fontSize="10" fill="#7d9bb3" opacity="0.9" transform={`rotate(-86 ${X(110.28)} ${Y(36.5)})`} letterSpacing="4">
-        黄 河
+      <text x={X(110.28)} y={Y(36.5)} fontSize="10" fill="#7d9bb3" opacity="0.9" transform={`rotate(-86 ${X(110.28)} ${Y(36.5)})`} letterSpacing="4">{t("黄 河")}
       </text>
 
       {/* 省界 · 金色双线 */}
@@ -139,8 +149,7 @@ export default function ShanxiMap({ selected, onSelect }: Props) {
 
       {/* 汾河 */}
       <path d={fenPath} fill="none" stroke="url(#river)" strokeWidth="3" strokeLinecap="round" strokeOpacity="0.85" />
-      <text x={X(111.55)} y={Y(36.4)} fontSize="9" fill="#7d9bb3" opacity="0.8" transform={`rotate(-60 ${X(111.55)} ${Y(36.4)})`} letterSpacing="3">
-        汾 河
+      <text x={X(111.55)} y={Y(36.4)} fontSize="9" fill="#7d9bb3" opacity="0.8" transform={`rotate(-60 ${X(111.55)} ${Y(36.4)})`} letterSpacing="3">{t("汾 河")}
       </text>
 
       {/* 山脉 */}
@@ -168,7 +177,7 @@ export default function ShanxiMap({ selected, onSelect }: Props) {
               stroke={INK_BG}
               strokeWidth="3"
             >
-              {r.name}
+              {t(r.name)}
             </text>
           )}
         </g>
@@ -189,7 +198,7 @@ export default function ShanxiMap({ selected, onSelect }: Props) {
             stroke={INK_BG}
             strokeWidth="3.5"
           >
-            {c.name}
+            {t(c.name)}
           </text>
         </g>
       ))}
@@ -199,7 +208,11 @@ export default function ShanxiMap({ selected, onSelect }: Props) {
         const active = s.id === selected.id
         const px = X(s.lng)
         const py = Y(s.lat)
-        const lp = LABEL_POS[s.id] ?? {}
+        const englishPosition: Record<string, { anchor: 'start' | 'end'; dy: number }> = {
+          hengshan: { anchor: 'start', dy: -18 }, xuankong: { anchor: 'start', dy: 13 },
+          wutaishan: { anchor: 'end', dy: 18 },
+        }
+        const lp = (english ? englishPosition[s.id] : undefined) ?? LABEL_POS[s.id] ?? {}
         const r = active ? 8.5 : 6
         return (
           <g
@@ -208,6 +221,7 @@ export default function ShanxiMap({ selected, onSelect }: Props) {
             onClick={() => onSelect(s)}
             className="cursor-pointer"
           >
+            <title>{t(s.name)}</title>
             {/* 扩大点击热区（透明） */}
             <circle r={r + 18} fill="rgba(0,0,0,0)" />
             <circle r={r + 12} fill="none" stroke={active ? RED : GOLD} strokeWidth="1" strokeOpacity="0.3">
@@ -227,18 +241,17 @@ export default function ShanxiMap({ selected, onSelect }: Props) {
               x={lp.anchor === 'end' ? -r - 6 : lp.anchor === 'start' ? r + 6 : 0}
               y={lp.anchor ? 4 + (lp.dy ?? 0) : -r - 7 + (lp.dy ?? 0)}
               textAnchor={lp.anchor ?? 'middle'}
-              fontSize={active ? 14 : 12}
+              fontSize={english ? active ? 12 : 10 : active ? 14 : 12}
               fontWeight={active ? 700 : 500}
               fill={active ? CREAM : '#e0d3ae'}
               style={{ transition: 'all .3s', paintOrder: 'stroke' }}
               stroke={INK_BG}
               strokeWidth="3.5"
             >
-              {s.name}
+              {english ? ENGLISH_LABELS[s.id] : s.name}
             </text>
             {s.hot && active && (
-              <text x="0" y={r + 16} textAnchor="middle" fontSize="9.5" fill="#e07a4f" style={{ paintOrder: 'stroke' }} stroke={INK_BG} strokeWidth="3">
-                ◈ 悟空足迹
+              <text x="0" y={r + 16} textAnchor="middle" fontSize="9.5" fill="#e07a4f" style={{ paintOrder: 'stroke' }} stroke={INK_BG} strokeWidth="3">{t("◈ 悟空足迹")}
               </text>
             )}
           </g>
@@ -252,26 +265,24 @@ export default function ShanxiMap({ selected, onSelect }: Props) {
         <path d="M 0 -13 L 3.5 0 L 0 13 L -3.5 0 Z" fill={GOLD} />
         <path d="M -13 0 L 0 3.5 L 13 0 L 0 -3.5 Z" fill="#8a744a" opacity="0.55" />
         <circle r="1.6" fill={CREAM} />
-        <text y="-24" textAnchor="middle" fontSize="11" fill={GOLD} letterSpacing="1">北</text>
+        <text y="-24" textAnchor="middle" fontSize="11" fill={GOLD} letterSpacing="1">{t("北")}</text>
       </g>
 
       {/* 图名 */}
-      <text x="30" y="52" fontSize="17" fill={GOLD} letterSpacing="6" fontWeight="700" style={{ paintOrder: 'stroke' }} stroke={INK_BG} strokeWidth="4">
-        三晋记忆图
+      <text x="30" y="52" fontSize="17" fill={GOLD} letterSpacing="6" fontWeight="700" style={{ paintOrder: 'stroke' }} stroke={INK_BG} strokeWidth="4">{t("三晋记忆图")}
       </text>
-      <text x="30" y="70" fontSize="9.5" fill="#8a744a" letterSpacing="3" style={{ paintOrder: 'stroke' }} stroke={INK_BG} strokeWidth="3">
-        表里山河 · 地上文物之省
+      <text x="30" y="70" fontSize="9.5" fill="#8a744a" letterSpacing="3" style={{ paintOrder: 'stroke' }} stroke={INK_BG} strokeWidth="3">{t("表里山河 · 地上文物之省")}
       </text>
 
       {/* 图例 */}
-      <g transform="translate(30, 604)" fontSize="10" fill="#a08c5f">
+      <g transform="translate(30, 604)" fontSize={english ? 8.2 : 10} fill="#a08c5f">
         <circle cx="4" cy="-3.5" r="4" fill="#2a2013" stroke={GOLD} strokeWidth="1.4" />
-        <text x="14" y="0">15 处记忆点已开放</text>
+        <text x="14" y="0">{t("15 处记忆点已开放")}</text>
         <path d="M 128 -3.5 L 150 -3.5" stroke="url(#river)" strokeWidth="3" strokeLinecap="round" />
-        <text x="156" y="0">黄河 · 汾河</text>
-        <text x="246" y="0" fill="#e07a4f">◈ 黑神话取景地</text>
-        <rect x="330" y="-8.5" width="5" height="5" transform="rotate(45 332.5 -6)" fill="#17130d" stroke={GOLD} strokeWidth="0.8" />
-        <text x="342" y="0">地市</text>
+        <text x="156" y="0">{t("黄河 · 汾河")}</text>
+        <text x={english ? 224 : 246} y="0" fill="#e07a4f">{english ? '◈ Wukong locations' : '◈ 黑神话取景地'}</text>
+        <rect x={english ? 345 : 330} y="-8.5" width="5" height="5" transform={english ? undefined : 'rotate(45 332.5 -6)'} fill="#17130d" stroke={GOLD} strokeWidth="0.8" />
+        <text x={english ? 355 : 342} y="0">{t("地市")}</text>
       </g>
     </svg>
   )

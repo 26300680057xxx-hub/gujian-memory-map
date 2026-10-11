@@ -1,3 +1,4 @@
+import { useTranslation } from '@/lib/language'
 import { useEffect, useRef, useState } from 'react'
 import { BookOpen, MapPin, Scroll, Compass, Sparkle } from 'lucide-react'
 import ShanxiMap from '@/components/ShanxiMap'
@@ -15,6 +16,8 @@ interface Props {
 type MapMode = 'painting' | 'drawn'
 
 export default function MapSection({ selected, onSelect, onOpen }: Props) {
+  const { t, english } = useTranslation()
+
   const [mode, setMode] = useState<MapMode>('painting')
   const [temple, setTemple] = useState(0) // 0=未播放；>0 为播放场次（用于重挂载）
   const playedRef = useRef(false)
@@ -50,8 +53,8 @@ export default function MapSection({ selected, onSelect, onOpen }: Props) {
       {temple > 0 && <TempleReveal key={temple} onDone={() => setTemple(0)} />}
       <div className="mb-10 text-center">
         <p className="mb-2 text-xs tracking-[0.4em] text-[#a08c5f]">MEMORY MAP</p>
-        <h2 className="text-3xl font-bold text-[#ece5d8] sm:text-4xl">记忆地图 · 山西</h2>
-        <p className="mt-3 text-sm text-[#8f8672]">点击光点，翻开一座古建的千年记忆</p>
+        <h2 className="text-3xl font-bold text-[#ece5d8] sm:text-4xl">{t("记忆地图 · 山西")}</h2>
+        <p className="mt-3 text-sm text-[#8f8672]">{t("点击光点，翻开一座古建的千年记忆")}</p>
 
         {/* 地图形态切换 */}
         <div className="mt-6 inline-flex rounded-full border border-[#3a3226] bg-[#17130d] p-1">
@@ -61,8 +64,7 @@ export default function MapSection({ selected, onSelect, onOpen }: Props) {
               mode === 'painting' ? 'bg-[#c03a2a] font-bold text-[#f3e3c0]' : 'text-[#a99c80] hover:text-[#cdbf9f]'
             }`}
           >
-            <Scroll size={13} />
-            古画立体版
+            <Scroll size={13} />{t("古画立体版")}
           </button>
           <button
             onClick={() => { playClick(); setMode('drawn') }}
@@ -70,16 +72,14 @@ export default function MapSection({ selected, onSelect, onOpen }: Props) {
               mode === 'drawn' ? 'bg-[#c03a2a] font-bold text-[#f3e3c0]' : 'text-[#a99c80] hover:text-[#cdbf9f]'
             }`}
           >
-            <Compass size={13} />
-            金线舆图版
+            <Compass size={13} />{t("金线舆图版")}
           </button>
           <button
             onClick={() => setTemple((n) => n + 1)}
             className="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs text-[#a99c80] transition hover:text-[#cdbf9f]"
-            title="重播古刹全息入场秀"
+            title={t("重播古刹全息入场秀")}
           >
-            <Sparkle size={13} />
-            全息入场
+            <Sparkle size={13} />{t("全息入场")}
           </button>
         </div>
       </div>
@@ -104,17 +104,17 @@ export default function MapSection({ selected, onSelect, onOpen }: Props) {
           <div className="paper-edge rounded-2xl border border-[#3a3226] bg-gradient-to-br from-[#1d1811] to-[#14100a] p-6">
             <div className="mb-1 flex items-center gap-2 text-[11px] tracking-widest text-[#a08c5f]">
               <span className="rounded border border-[#4a3f2a] px-1.5 py-0.5">
-                {selected.dynasty} · {selected.year}
+                {t(selected.dynasty)} · {t(selected.year)}
               </span>
-              {selected.hot && <span className="text-[#e07a4f]">◈ 黑神话取景地</span>}
+              {selected.hot && <span className="text-[#e07a4f]">{t("◈ 黑神话取景地")}</span>}
             </div>
-            <h3 className="text-2xl font-bold text-[#ece5d8]">{selected.name}</h3>
-            <p className="mb-3 mt-0.5 text-xs text-[#8f8672]">{selected.alias} — {selected.location}</p>
-            <p className="text-sm leading-relaxed text-[#a99c80]">{selected.intro}</p>
+            <h3 className="text-2xl font-bold text-[#ece5d8]">{t(selected.name)}</h3>
+            <p className="mb-3 mt-0.5 text-xs text-[#8f8672]">{t(selected.alias)} — {t(selected.location)}</p>
+            <p className="text-sm leading-relaxed text-[#a99c80]">{t(selected.intro)}</p>
             <div className="mt-4 flex flex-wrap gap-1.5">
-              {selected.tags.map((t) => (
-                <span key={t} className="rounded-full bg-[#241e13] px-2.5 py-1 text-[11px] text-[#c9a05a]">
-                  {t}
+              {selected.tags.map((tag) => (
+                <span key={tag} className="rounded-full bg-[#241e13] px-2.5 py-1 text-[11px] text-[#c9a05a]">
+                  {t(tag)}
                 </span>
               ))}
             </div>
@@ -122,8 +122,7 @@ export default function MapSection({ selected, onSelect, onOpen }: Props) {
               onClick={() => { playClick(); onOpen(selected) }}
               className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#c03a2a] py-3 font-bold text-[#f3e3c0] transition hover:bg-[#d14533]"
             >
-              <BookOpen size={16} />
-              翻开「{selected.name}」的记忆
+              <BookOpen size={16} />{english ? "Open " : "翻开「"}{t(selected.name)}{english ? "’s memories" : "」的记忆"}
             </button>
           </div>
 
@@ -139,8 +138,8 @@ export default function MapSection({ selected, onSelect, onOpen }: Props) {
                 }`}
               >
                 <MapPin size={13} className={s.id === selected.id ? 'text-[#e07a4f]' : 'text-[#6b6350]'} />
-                <span className="truncate">{s.name}</span>
-                <span className="ml-auto shrink-0 text-[10px] text-[#6b6350]">{s.dynasty}</span>
+                <span className="truncate">{t(s.name)}</span>
+                <span className="ml-auto shrink-0 text-[10px] text-[#6b6350]">{t(s.dynasty)}</span>
               </button>
             ))}
           </div>
