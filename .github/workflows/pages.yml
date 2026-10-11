@@ -24,6 +24,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Download temple.glb from Release
+        if: ${{ hashFiles('public/models/temple.glb') == '' }}
         run: |
           mkdir -p public/models
           curl -L --retry 3 -o public/models/temple.glb https://github.com/26300680057xxx-hub/gujian-memory-map/releases/download/v1.0/temple.glb

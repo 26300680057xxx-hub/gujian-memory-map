@@ -1,3 +1,5 @@
+import { useTranslation } from '@/lib/language'
+import { publicAsset } from '@/lib/assets'
 import { useEffect, useRef, useState } from 'react'
 import { X, Play, Pause, Landmark, Sparkles, ScrollText, BarChart3, Orbit } from 'lucide-react'
 import type { Site } from '@/data/sites'
@@ -94,6 +96,8 @@ const tabs: { key: Tab; label: string; icon: typeof Sparkles }[] = [
 ]
 
 export default function SiteDialog({ site, onClose }: Props) {
+  const { t, english } = useTranslation()
+
   const [tab, setTab] = useState<Tab>('monologue')
   const [revealing, setRevealing] = useState(false)
   const [playing, setPlaying] = useState<'std' | 'dia' | null>(null)
@@ -109,7 +113,7 @@ export default function SiteDialog({ site, onClose }: Props) {
     }
     playClick()
     audioRef.current?.pause()
-    const a = new Audio(`${import.meta.env.BASE_URL}audio/${site.id}-${kind}.mp3`)
+    const a = new Audio(publicAsset(`audio/${site.id}-${kind}.mp3`))
     a.onended = () => setPlaying(null)
     a.onerror = () => setPlaying(null)
     audioRef.current = a
@@ -153,7 +157,7 @@ export default function SiteDialog({ site, onClose }: Props) {
         className="ink-noise paper-edge relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-[#3a3226] bg-[#17130d] sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
-        aria-label={`${site.name} 记忆档案`}
+        aria-label={`${t(site.name)} ${t("记忆档案")}`}
       >
         {/* 建筑浮现 · 出场特效（每个记忆点各不相同） */}
         {revealing && (
@@ -264,8 +268,7 @@ export default function SiteDialog({ site, onClose }: Props) {
                 <p
                   className="absolute top-[15%] text-[11px] tracking-[0.5em] text-[#c9866a]"
                   style={{ animation: 'fade-in-late 1.8s ease 0.2s both' }}
-                >
-                  烽火连天 · 岿然不动
+                >{t("烽火连天 · 岿然不动")}
                 </p>
               </>
             )}
@@ -303,8 +306,7 @@ export default function SiteDialog({ site, onClose }: Props) {
                 <p
                   className="absolute top-[13%] text-[11px] tracking-[0.5em] text-[#d9a84e]"
                   style={{ animation: 'fade-in-late 1.8s ease 0.6s both', textShadow: '0 0 16px rgba(217,168,78,0.6)' }}
-                >
-                  既见未来 · 为何不拜
+                >{t("既见未来 · 为何不拜")}
                 </p>
               </>
             )}
@@ -371,13 +373,13 @@ export default function SiteDialog({ site, onClose }: Props) {
               className="relative mb-4 text-xs tracking-[0.6em] text-[#a08c5f]"
               style={{ animation: 'building-rise 1s cubic-bezier(0.22,1,0.36,1) 0.15s both' }}
             >
-              {site.dynasty} · {site.year} · {site.location}
+              {t(site.dynasty)} · {t(site.year)} · {t(site.location)}
             </p>
             {/* 主视觉：有抠图则建筑本尊浮现，否则大字名号 */}
             {revealImg ? (
               <img
                 src={revealImg}
-                alt={site.name}
+                alt={t(site.name)}
                 draggable={false}
                 className="relative max-h-[34vh] w-auto max-w-[82%] select-none object-contain"
                 style={{ animation: MAIN_ANIM[revealKind], filter: 'drop-shadow(0 14px 28px rgba(0,0,0,0.65))' }}
@@ -390,7 +392,7 @@ export default function SiteDialog({ site, onClose }: Props) {
                   textShadow: '0 0 40px rgba(201,160,90,0.45), 0 4px 20px rgba(0,0,0,0.8)',
                 }}
               >
-                {site.name}
+                {t(site.name)}
               </h2>
             )}
             {/* 有抠图时名字放在建筑下方 */}
@@ -402,7 +404,7 @@ export default function SiteDialog({ site, onClose }: Props) {
                   textShadow: '0 0 34px rgba(201,160,90,0.45), 0 4px 18px rgba(0,0,0,0.8)',
                 }}
               >
-                {site.name}
+                {t(site.name)}
               </h2>
             )}
             {/* 朱红印章砸下（seal 版式更大、更早砸下） */}
@@ -413,10 +415,10 @@ export default function SiteDialog({ site, onClose }: Props) {
               style={{ animation: `seal-stamp 0.7s cubic-bezier(0.34,1.56,0.64,1) ${revealKind === 'seal' ? '0.15s' : '0.9s'} both` }}
             >
               <span className={`font-kai text-vertical font-bold leading-none text-[#f3e3c0] ${revealKind === 'seal' ? 'text-2xl' : 'text-lg'}`}>
-                {site.name.slice(0, 2)}
+                {english ? "MEM" : site.name.slice(0, 2)}
               </span>
             </div>
-            <p className="absolute bottom-6 text-[10px] tracking-[0.4em] text-[#4a4232]">记 忆 浮 现 中 · 点 击 跳 过</p>
+            <p className="absolute bottom-6 text-[10px] tracking-[0.4em] text-[#4a4232]">{t("记 忆 浮 现 中 · 点 击 跳 过")}</p>
           </div>
         )}
         {/* 头部 */}
@@ -424,11 +426,11 @@ export default function SiteDialog({ site, onClose }: Props) {
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="mb-2 flex flex-wrap items-center gap-2 text-[11px] tracking-widest text-[#a08c5f]">
-                <span className="rounded border border-[#4a3f2a] px-1.5 py-0.5">{site.dynasty} · {site.year}</span>
-                <span className="flex items-center gap-1"><Landmark size={12} />{site.location}</span>
+                <span className="rounded border border-[#4a3f2a] px-1.5 py-0.5">{t(site.dynasty)} · {t(site.year)}</span>
+                <span className="flex items-center gap-1"><Landmark size={12} />{t(site.location)}</span>
               </div>
-              <h2 className="text-3xl font-bold text-[#ece5d8] sm:text-4xl">{site.name}</h2>
-              <p className="mt-1 text-sm text-[#8f8672]">{site.alias}</p>
+              <h2 className="text-3xl font-bold text-[#ece5d8] sm:text-4xl">{t(site.name)}</h2>
+              <p className="mt-1 text-sm text-[#8f8672]">{t(site.alias)}</p>
               {site.panorama && (
                 <a
                   href={site.panorama}
@@ -437,20 +439,19 @@ export default function SiteDialog({ site, onClose }: Props) {
                   onClick={() => playClick()}
                   className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#c9a05a] bg-[#c9a05a]/10 px-5 py-2 text-sm font-bold text-[#e3c88a] transition hover:bg-[#c9a05a]/25 hover:text-[#f3e3c0]"
                 >
-                  <Orbit size={15} />
-                  全景真实漫游 · 3D 实景
+                  <Orbit size={15} />{t("全景真实漫游 · 3D 实景")}
                 </a>
               )}
             </div>
             {/* 印章 */}
             <div className="animate-seal flex h-14 w-14 shrink-0 items-center justify-center rounded-[6px] border-2 border-[#c03a2a] bg-[#a53428] text-[#f3e3c0] shadow-lg">
-              <span className="font-kai text-vertical text-lg font-bold leading-none">{site.name.slice(0, 2)}</span>
+              <span className="font-kai text-vertical text-lg font-bold leading-none">{english ? "MEM" : site.name.slice(0, 2)}</span>
             </div>
           </div>
           <button
             onClick={onClose}
             className="absolute right-4 top-4 rounded-full p-1.5 text-[#8f8672] transition hover:bg-white/5 hover:text-[#ece5d8]"
-            aria-label="关闭"
+            aria-label={t("关闭")}
           >
             <X size={18} />
           </button>
@@ -470,12 +471,12 @@ export default function SiteDialog({ site, onClose }: Props) {
                     ? 'border-[#c03a2a] text-[#ece5d8]'
                     : 'border-transparent text-[#8f8672] hover:text-[#cdbf9f]'
                 } ${disabled ? 'cursor-not-allowed opacity-35' : ''}`}
-                title={disabled ? '该记忆点的 AI 短剧制作中' : undefined}
+                title={disabled ? t("该记忆点的 AI 短剧制作中") : undefined}
               >
                 <Icon size={14} />
-                {label}
+                {t(label)}
                 {key === 'drama' && site.drama && (
-                  <span className="rounded bg-[#c03a2a] px-1 text-[10px] text-[#f3e3c0]">样例</span>
+                  <span className="rounded bg-[#c03a2a] px-1 text-[10px] text-[#f3e3c0]">{t("样例")}</span>
                 )}
               </button>
             )
@@ -486,9 +487,9 @@ export default function SiteDialog({ site, onClose }: Props) {
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8">
           {tab === 'monologue' && (
             <div className="animate-fade-up space-y-5">
-              <p className="text-xs tracking-widest text-[#a08c5f]">AI 生成 · 第一人称叙事语音讲解</p>
+              <p className="text-xs tracking-widest text-[#a08c5f]">{t("AI 生成 · 第一人称叙事语音讲解")}</p>
               <blockquote className="border-l-2 border-[#c03a2a] pl-5 font-kai text-lg leading-loose text-[#e3d9c4]">
-                {site.monologue}
+                {t(site.monologue)}
               </blockquote>
               <div className="flex flex-wrap gap-3">
                 <button
@@ -500,7 +501,7 @@ export default function SiteDialog({ site, onClose }: Props) {
                   }`}
                 >
                   {playing === 'std' ? <Pause size={14} /> : <Play size={14} />}
-                  {playing === 'std' ? '暂停普通话讲解' : '播放普通话讲解'}
+                  {playing === 'std' ? t("暂停普通话讲解") : t("播放普通话讲解")}
                 </button>
                 <button
                   onClick={() => toggleNarration('dia')}
@@ -511,7 +512,7 @@ export default function SiteDialog({ site, onClose }: Props) {
                   }`}
                 >
                   {playing === 'dia' ? <Pause size={14} /> : <Play size={14} />}
-                  {playing === 'dia' ? '暂停太原话讲解' : '播放太原话讲解'}
+                  {playing === 'dia' ? t("暂停太原话讲解") : t("播放太原话讲解")}
                 </button>
               </div>
             </div>
@@ -520,27 +521,26 @@ export default function SiteDialog({ site, onClose }: Props) {
           {tab === 'drama' && site.drama && (
             <div className="animate-fade-up space-y-5">
               <div>
-                <h3 className="text-xl font-bold text-[#ece5d8]">{site.drama.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-[#8f8672]">{site.drama.logline}</p>
+                <h3 className="text-xl font-bold text-[#ece5d8]">{t(site.drama.title)}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-[#8f8672]">{t(site.drama.logline)}</p>
               </div>
               {site.drama.scenes.map((sc) => (
                 <div key={sc.no} className="rounded-lg border border-[#2c2619] bg-[#1c1710] p-4 sm:p-5">
                   <div className="mb-2 flex items-baseline gap-3">
                     <span className="font-mono text-2xl font-bold text-[#c03a2a]">{sc.no}</span>
-                    <span className="font-bold text-[#ece5d8]">{sc.title}</span>
+                    <span className="font-bold text-[#ece5d8]">{t(sc.title)}</span>
                   </div>
                   <p className="mb-3 text-sm leading-relaxed text-[#a99c80]">
-                    <span className="mr-2 rounded bg-[#2c2619] px-1.5 py-0.5 text-[11px] text-[#a08c5f]">画面</span>
-                    {sc.visual}
+                    <span className="mr-2 rounded bg-[#2c2619] px-1.5 py-0.5 text-[11px] text-[#a08c5f]">{t("画面")}</span>
+                    {t(sc.visual)}
                   </p>
                   <p className="font-kai text-[15px] leading-relaxed text-[#e3d9c4]">
-                    <span className="mr-2 rounded bg-[#3a2018] px-1.5 py-0.5 text-[11px] text-[#e07a4f]">旁白</span>
-                    {sc.vo}
+                    <span className="mr-2 rounded bg-[#3a2018] px-1.5 py-0.5 text-[11px] text-[#e07a4f]">{t("旁白")}</span>
+                    {t(sc.vo)}
                   </p>
                 </div>
               ))}
-              <p className="text-xs leading-relaxed text-[#6b6350]">
-                制作管线：史料 RAG 检索 → AI 剧本生成 → 文生视频 / 图生视频 → AI 方言配音 → 地图记忆点挂载。
+              <p className="text-xs leading-relaxed text-[#6b6350]">{t("制作管线：史料 RAG 检索 → AI 剧本生成 → 文生视频 / 图生视频 → AI 方言配音 → 地图记忆点挂载。")}
               </p>
             </div>
           )}
@@ -551,9 +551,9 @@ export default function SiteDialog({ site, onClose }: Props) {
                 <div key={f.title} className="rounded-lg border border-[#2c2619] bg-[#1c1710] p-4 sm:p-5">
                   <h4 className="mb-1.5 flex items-center gap-2 font-bold text-[#e3d9c4]">
                     <span className="inline-block h-2 w-2 rotate-45 bg-[#c03a2a]" />
-                    {f.title}
+                    {t(f.title)}
                   </h4>
-                  <p className="text-sm leading-relaxed text-[#a99c80]">{f.text}</p>
+                  <p className="text-sm leading-relaxed text-[#a99c80]">{t(f.text)}</p>
                 </div>
               ))}
             </div>
@@ -564,12 +564,12 @@ export default function SiteDialog({ site, onClose }: Props) {
               <div className="grid grid-cols-2 gap-3">
                 {site.stats.map((s) => (
                   <div key={s.label} className="rounded-lg border border-[#2c2619] bg-[#1c1710] p-4 text-center">
-                    <div className="text-xl font-bold text-[#c9a05a]">{s.value}</div>
-                    <div className="mt-1 text-xs tracking-widest text-[#8f8672]">{s.label}</div>
+                    <div className="text-xl font-bold text-[#c9a05a]">{t(s.value)}</div>
+                    <div className="mt-1 text-xs tracking-widest text-[#8f8672]">{t(s.label)}</div>
                   </div>
                 ))}
               </div>
-              <p className="mt-5 text-sm leading-relaxed text-[#a99c80]">{site.intro}</p>
+              <p className="mt-5 text-sm leading-relaxed text-[#a99c80]">{t(site.intro)}</p>
             </div>
           )}
         </div>

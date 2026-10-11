@@ -1,3 +1,4 @@
+import { useTranslation } from '@/lib/language'
 import { sites } from '@/data/sites'
 
 const order = ['北魏', '唐', '辽', '北宋', '元', '明', '清']
@@ -12,6 +13,8 @@ const dynastyColor: Record<string, string> = {
 }
 
 export default function TimelineSection() {
+  const { t } = useTranslation()
+
   const items = order
     .map((d) => ({ dynasty: d, sites: sites.filter((s) => s.dynasty === d) }))
     .filter((g) => g.sites.length > 0)
@@ -20,8 +23,8 @@ export default function TimelineSection() {
     <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
       <div className="mb-12 text-center">
         <p className="mb-2 text-xs tracking-[0.4em] text-[#a08c5f]">TIMELINE</p>
-        <h2 className="text-3xl font-bold text-[#ece5d8] sm:text-4xl">一条跨越 1500 年的中轴线</h2>
-        <p className="mt-3 text-sm text-[#8f8672]">从北魏的石窟到明代的悬塑，山西保存了半部中国建筑史</p>
+        <h2 className="text-3xl font-bold text-[#ece5d8] sm:text-4xl">{t("一条跨越 1500 年的中轴线")}</h2>
+        <p className="mt-3 text-sm text-[#8f8672]">{t("从北魏的石窟到明代的悬塑，山西保存了半部中国建筑史")}</p>
       </div>
 
       <div className="relative">
@@ -44,7 +47,7 @@ export default function TimelineSection() {
                 className="inline-block text-xs font-bold tracking-[0.3em]"
                 style={{ color: dynastyColor[g.dynasty] }}
               >
-                {g.dynasty}
+                {t(g.dynasty)}
               </div>
               {g.sites.map((s) => (
                 <div
@@ -52,10 +55,10 @@ export default function TimelineSection() {
                   className="rounded-xl border border-[#2c2619] bg-[#17130d] p-4 transition hover:border-[#4a3f2a]"
                 >
                   <div className="flex items-baseline justify-between gap-2">
-                    <span className="font-bold text-[#ece5d8]">{s.name}</span>
-                    <span className="shrink-0 text-[11px] text-[#6b6350]">{s.year}</span>
+                    <span className="font-bold text-[#ece5d8]">{t(s.name)}</span>
+                    <span className="shrink-0 text-[11px] text-[#6b6350]">{t(s.year)}</span>
                   </div>
-                  <p className="mt-1 text-xs leading-relaxed text-[#8f8672]">{s.alias} · {s.location}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-[#8f8672]">{t(s.alias)} · {t(s.location)}</p>
                 </div>
               ))}
             </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from '@/lib/language'
 import { useRef, useState, useCallback } from 'react'
 import { sites, type Site } from '@/data/sites'
 import mapImg from '@/assets/shanxi-map.jpg'
@@ -76,6 +77,8 @@ const clipOf = (p: Pin) =>
   `ellipse(${p.rx ?? 6}% ${p.ry ?? 5.5}% at ${p.cx ?? p.x}% ${p.cy ?? p.y}%)`
 
 export default function PaintingMap({ selected, onSelect }: Props) {
+  const { t } = useTranslation()
+
   const wrapRef = useRef<HTMLDivElement>(null)
   const hoverRef = useRef<string | null>(null)
   const [tilt, setTilt] = useState({ rx: 0, ry: 0, on: false })
@@ -129,7 +132,7 @@ export default function PaintingMap({ selected, onSelect }: Props) {
         {/* 古画底图 */}
         <img
           src={mapImg}
-          alt="山西省文旅地图"
+          alt={t("山西省文旅地图")}
           className="block w-full select-none rounded-lg border border-[#4a3f2a]"
           style={{ boxShadow: '0 30px 80px -20px rgba(0,0,0,0.85), 0 0 0 6px #17130d, 0 0 0 7px #4a3f2a' }}
           draggable={false}
@@ -220,7 +223,7 @@ export default function PaintingMap({ selected, onSelect }: Props) {
                   transform: `translate(-50%,-50%) translateZ(${active ? 26 : 0}px)`,
                   transition: 'transform .35s cubic-bezier(0.34,1.56,0.64,1)',
                 }}
-                aria-label={s.name}
+                aria-label={t(s.name)}
               >
                 {/* 涟漪 */}
                 <span
@@ -245,8 +248,8 @@ export default function PaintingMap({ selected, onSelect }: Props) {
                       : 'border-[#8a744a] bg-[#ece0c3]/95 text-[#3a2f1d] opacity-0 group-hover:opacity-100'
                   }`}
                 >
-                  {s.name}
-                  {s.hot && active && <span className="ml-1 text-[9px] text-[#f0b89a]">◈悟空足迹</span>}
+                  {t(s.name)}
+                  {s.hot && active && <span className="ml-1 text-[9px] text-[#f0b89a]">{t("◈悟空足迹")}</span>}
                 </span>
               </button>
             )
@@ -255,8 +258,7 @@ export default function PaintingMap({ selected, onSelect }: Props) {
       </div>
 
       {/* 底部操作提示 */}
-      <p className="mt-4 text-center text-[11px] tracking-[0.25em] text-[#6b6350]">
-        移动鼠标 · 画卷立体浮动 —— 悬停光点 · 建筑拔地而起 —— 点击翻开记忆
+      <p className="mt-4 text-center text-[11px] tracking-[0.25em] text-[#6b6350]">{t("移动鼠标 · 画卷立体浮动 —— 悬停光点 · 建筑拔地而起 —— 点击翻开记忆")}
       </p>
     </div>
   )

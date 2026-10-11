@@ -280,3 +280,41 @@
   background: hsl(8 62% 48% / 0.85);
   color: hsl(42 40% 94%);
 }
+
+/* English copy has its own typesetting; Chinese dimensions remain unchanged. */
+.language-toggle:focus-visible {
+  outline: 2px solid #e8cf9a;
+  outline-offset: 4px;
+}
+.language-english {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+.language-english .font-kai { font-family: Georgia, 'Times New Roman', serif; }
+.language-english header > .max-w-3xl { max-width: 1060px; }
+.language-english header h1 { font-size: clamp(2.4rem, 4.2vw, 3.75rem); letter-spacing: -0.035em; }
+.language-english header > .text-vertical { writing-mode: horizontal-tb; width: 420px; letter-spacing: 0.13em; }
+.language-english header > .text-vertical.left-6 { left: -172px; transform: translateY(-50%) rotate(-90deg); }
+.language-english header > .text-vertical.right-6 { right: -172px; transform: translateY(-50%) rotate(90deg); }
+.language-english .text-vertical { writing-mode: horizontal-tb; letter-spacing: 0.04em; }
+.language-english [role="dialog"] .text-vertical { font-size: 0.85rem; }
+.language-english [role="dialog"] .tracking-widest,
+.language-english [role="dialog"] .tracking-\[0\.6em\] { letter-spacing: 0.04em; }
+.language-english #map .tracking-widest { letter-spacing: 0.03em; }
+.language-english #map button { min-width: 0; }
+.language-english #map h3 { line-height: 1.25; }
+.language-english #map .flex.items-center.gap-2.text-\[11px\] { flex-wrap: wrap; }
+.language-english svg[viewBox="0 0 440 640"] text { letter-spacing: 0; }
+.language-english #map .grid.grid-cols-2 button { flex-wrap: wrap; align-content: center; gap: 5px; }
+.language-english #map .grid.grid-cols-2 button .truncate { flex: 1; min-width: 0; white-space: normal; overflow: visible; line-height: 1.35; }
+.language-english #map .grid.grid-cols-2 button .ml-auto { flex-basis: 100%; padding-left: 18px; margin-left: 0; }
+@media (max-width: 639px) {
+  .language-english header { padding-top: 80px; padding-bottom: 72px; }
+  .language-english header h1 { font-size: 2.5rem; line-height: 1.15; }
+  .language-english header .mt-14 { gap: 12px; }
+  .language-english [role="dialog"] > .flex.shrink-0 { gap: 0; padding-left: 8px; padding-right: 8px; }
+  .language-english [role="dialog"] > .flex.shrink-0 button { gap: 4px; padding: 12px 8px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hologram-orbit { animation: none !important; }
+}

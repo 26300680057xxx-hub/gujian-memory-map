@@ -1,3 +1,5 @@
+import { useTranslation } from '@/lib/language'
+import { publicAsset } from '@/lib/assets'
 import { useRef, useState } from 'react'
 import { Music, Pause } from 'lucide-react'
 import { playClick } from '@/lib/sound'
@@ -8,6 +10,8 @@ import { playClick } from '@/lib/sound'
  * 音频文件：public/audio/bgm.mp3（《平生意》关大洲 · 逆水寒手游国风推广曲）
  */
 export default function BgmPlayer() {
+  const { t } = useTranslation()
+
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [playing, setPlaying] = useState(false)
 
@@ -19,7 +23,7 @@ export default function BgmPlayer() {
       return
     }
     if (!audioRef.current) {
-      const a = new Audio(`${import.meta.env.BASE_URL}audio/bgm.mp3`)
+      const a = new Audio(publicAsset('audio/bgm.mp3'))
       a.loop = true
       a.volume = 0.35
       a.onended = () => setPlaying(false)
@@ -35,14 +39,13 @@ export default function BgmPlayer() {
   return (
     <div className="fixed bottom-6 right-6 z-40 flex items-center gap-2">
       {playing && (
-        <span className="animate-fade-up rounded-full border border-[#4a3f2a] bg-[#17130d]/90 px-3 py-1 text-[11px] tracking-wider text-[#a08c5f]">
-          ♪ 平生意 · 关大洲
+        <span className="animate-fade-up rounded-full border border-[#4a3f2a] bg-[#17130d]/90 px-3 py-1 text-[11px] tracking-wider text-[#a08c5f]">{t("♪ 平生意 · 关大洲")}
         </span>
       )}
       <button
         onClick={toggle}
-        aria-label={playing ? '暂停背景音乐' : '播放背景音乐'}
-        title={playing ? '暂停背景音乐' : '播放背景音乐《平生意》'}
+        aria-label={playing ? t("暂停背景音乐") : t("播放背景音乐")}
+        title={playing ? t("暂停背景音乐") : t("播放背景音乐《平生意》")}
         className={`flex h-12 w-12 items-center justify-center rounded-full border shadow-[0_8px_24px_-8px_rgba(0,0,0,0.7)] transition ${
           playing
             ? 'border-[#c9a05a] bg-[#2a2113] text-[#e3c88a]'
